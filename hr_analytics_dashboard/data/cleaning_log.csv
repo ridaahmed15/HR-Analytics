@@ -1,0 +1,11 @@
+#,Step,What was done & why,Impact
+1,Trim whitespace,Stripped leading/trailing spaces from all text columns so identical values group together.,0 cells changed
+2,Standardise categories,`BusinessTravel` held both 'Travel_Rarely' and 'TravelRarely' for the same category - merged into 'Travel_Rarely'.,8 rows relabelled
+3,Remove exact duplicates,Dropped rows that were identical in every column (keeping the first).,7 rows removed
+4,Resolve duplicate employee IDs,"The same EmpID appeared more than once with conflicting values (e.g. different YearsWithCurrManager). An employee can only exist once, so the first record was kept.",3 rows removed
+5,Drop zero-variance columns,"Columns with a single value carry no analytical information: `EmployeeCount`, `Over18`, `StandardHours`.",3 columns removed
+6,Impute missing values,"`YearsWithCurrManager`: 57 blanks filled with median of employees with the same `YearsInCurrentRole` (corr. ~0.7), capped at `YearsAtCompany`; an `_Imputed` flag column keeps these rows identifiable.",57 cells filled
+7,Fix data types,Whole-number columns that were stored as decimals were converted to integers.,1 columns cast
+8,Validate business rules,Checked tenure/age/income consistency and rebuilt `AgeGroup` and `SalarySlab` directly from Age and MonthlyIncome.,0 violations found
+9,Outlier screening (IQR rule),"Extreme values were reviewed but kept: they are plausible (e.g. 40-year careers, senior salaries) and removing them would bias attrition analysis.","712 flagged, 0 removed"
+10,Feature engineering,"Added readable fields: `AttritionFlag`, `Status`, `TenureBand`, `DistanceBand`, `Education_Label`, `EnvironmentSatisfaction_Label`, `JobInvolvement_Label`, `JobSatisfaction_Label`, `RelationshipSatisfaction_Label`, `WorkLifeBalance_Label`, `PerformanceRating_Label`. Ordinal scores (1-4/1-5) are labelled using the standard IBM HR data dictionary (assumption).",11 columns added
